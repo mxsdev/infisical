@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import Head from "next/head";
 
-import { ShareSecretPage } from "@app/views/ShareSecretPage";
+import { UserSecretPage } from "@app/views/UserSecretPage/UserSecretPage";
 
-const SecretSharing = () => {
+const SecretApproval = () => {
   const { t } = useTranslation();
 
   return (
@@ -16,12 +16,12 @@ const SecretSharing = () => {
         <meta name="og:description" content={String(t("approval.og-description"))} />
       </Head>
       <div className="h-full">
-        <ShareSecretPage />
+        <UserSecretPage />
       </div>
     </>
   );
 };
 
-export default SecretSharing;
+export default SecretApproval;
 
-SecretSharing.requireAuth = true;
+SecretApproval.requireAuth = true;

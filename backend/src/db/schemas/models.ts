@@ -120,7 +120,8 @@ export enum TableName {
   KmsKeyVersion = "kms_key_versions",
   WorkflowIntegrations = "workflow_integrations",
   SlackIntegrations = "slack_integrations",
-  ProjectSlackConfigs = "project_slack_configs"
+  ProjectSlackConfigs = "project_slack_configs",
+  UserSecret = "user_secrets"
 }
 
 export type TImmutableDBKeys = "id" | "createdAt" | "updatedAt";
@@ -196,3 +197,28 @@ export enum IdentityAuthMethod {
   AZURE_AUTH = "azure-auth",
   OIDC_AUTH = "oidc-auth"
 }
+
+export enum UserSecretType {
+  WebLogin = "web-login",
+  CreditCard = "credit-card",
+  SecureNote = "secure-note"
+}
+
+export const UserSecretCredentialsSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal(UserSecretType.WebLogin),
+    username: z.string(),
+    password: z.string()
+  }),
+  z.object({
+    type: z.literal(UserSecretType.CreditCard),
+    cardNumber: z.string().min(16).max(16).regex(/^\d+$/, "Card number must be a number"),
+    expiryMonth: z.string().min(2).max(2).regex(/^\d+$/, "Expiry month must be a number"),
+    expiryYear: z.string().min(2).max(2).regex(/^\d+$/, "Expiry year must be a number"),
+    cvv: z.string().min(3).max(4).regex(/^\d+$/, "CVV must be a number")
+  }),
+  z.object({
+    type: z.literal(UserSecretType.SecureNote),
+    note: z.string()
+  })
+]);
